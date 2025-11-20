@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dashboard globals (pure CSS - avoid @apply to prevent Tailwind @apply issues) */
+:root {
+	--primary: #0ea5e9;
+	--primary-600: #0ba7e0;
+	--accent: #7c3aed;
+	--bg: #f6f8fb;
+	--card: #ffffff;
+	--muted: #667085;
+	--text: #0f172a;
+}
+
+html,body,#root {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: var(--bg);
+	color: var(--text);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Sidebar */
+.app-sidebar {
+	width: 13.75rem; /* 220px to better match screenshot */
+	background: var(--card);
+	border-right: 1px solid rgba(15,23,42,0.06);
+	height: 100vh;
+	position: sticky;
+	top: 0;
+}
+
+.app-sidebar .logo-box {
+	width: 44px;
+	height: 44px;
+	background: var(--primary);
+	color: white;
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.app-sidebar .brand {
+	padding: 18px 20px;
+	display:flex;
+	gap:12px;
+	align-items:center;
+	border-bottom: 1px solid rgba(15,23,42,0.03);
+}
+
+.app-sidebar nav ul { list-style: none; margin: 0; padding: 20px 8px; }
+
+.app-sidebar nav a {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 14px;
+	margin: 6px 8px;
+	border-radius: 0 10px 10px 0;
+	color: var(--text);
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.app-sidebar nav a:hover {
+	background: rgba(15,23,42,0.03);
+}
+
+.app-sidebar nav a.active,
+.app-sidebar nav a[aria-current="true"] {
+	background: rgba(14,165,233,0.08);
+	color: var(--primary);
+	border-right: 4px solid var(--primary);
+}
+
+/* Icon inside nav */
+.nav-icon { display:inline-flex; width:18px; height:18px; align-items:center; justify-content:center; }
+.nav-icon svg { display:block; width:18px; height:18px; }
+
+/* Section panel to match screenshot */
+.section-panel { background: var(--card); border-radius: 10px; padding: 20px; border: 1px solid rgba(15,23,42,0.04); box-shadow: 0 6px 18px rgba(15,23,42,0.03); }
+
+/* Button look for CTA */
+.modern-button {
+	background: linear-gradient(90deg, var(--primary), var(--primary-600));
+	color: white;
+	padding: 10px 16px;
+	border-radius: 10px;
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Metric small cards used at top of dashboard */
+.metric-card {
+	display:flex;
+	align-items:center;
+	gap:16px;
+	padding:16px;
+	border-radius:8px;
+	background: var(--card);
+	border:1px solid rgba(15,23,42,0.03);
+}
+
+.metric-card .card-icon {
+	width:44px; height:44px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:20px; color:var(--primary); background: linear-gradient(180deg, rgba(14,165,233,0.12), rgba(14,165,233,0.06));
+}
+
+.card-title { font-size: 14px; color: var(--muted); }
+.card-value { font-size: 28px; font-weight:800; color: var(--primary); }
+
+.panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.panel-title { font-size:20px; font-weight:700; }
+
+/* Hover elevation for metric cards */
+.metric-card { transition: transform 220ms ease, box-shadow 220ms ease; }
+.metric-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(15,23,42,0.08); }
+
+/* Sidebar active stronger */
+.app-sidebar nav a.active, .app-sidebar nav a[aria-current="true"] { box-shadow: inset -6px 0 0 var(--primary); }
+
+/* Sumo pulsing dot (canvas fallback visuals) */
+.sumo-dot { width:10px; height:10px; border-radius:999px; box-shadow:0 2px 6px rgba(0,0,0,0.35); }
+
+
+/* Tabs / list look */
+.tabs-list { display:flex; gap:8px; background: transparent; }
+.tabs-trigger { padding: 8px 12px; border-radius:8px; color:var(--muted); }
+.tabs-trigger.active { background: rgba(14,165,233,0.06); color:var(--primary); font-weight:600; }
+
+/* Traffic map adjustments */
+.map-wrapper { padding: 12px; }
+.map-area { background: #f8fafc; border-radius:8px; border:1px solid rgba(15,23,42,0.03); height:100%; }
+
+/* SUMO visualization styling (dots & roads demo) */
+.sumo-canvas { background: #1f1724; border-radius:8px; height:100%; position:relative; overflow:hidden; }
+.sumo-canvas .road { background: #2b2430; position:absolute; }
+.sumo-canvas .dot { position:absolute; width:10px; height:10px; border-radius:999px; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
+
+/* Header */
+.header-bar { border-bottom: 1px solid rgba(15,23,42,0.06); background: transparent; }
+.header-title { font-size: 22px; font-weight: 800; letter-spacing: -0.2px; }
+
+/* Dashboard cards */
+.dashboard-card {
+	background: var(--card);
+	border-radius: 10px;
+	border: 1px solid rgba(15,23,42,0.04);
+	box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+	padding: 1rem 1.25rem;
+}
+
+.metric-number { font-size: 1.875rem; font-weight: 800; color: var(--primary); }
+.metric-label { color: var(--muted); font-size: 0.875rem; }
+
+.map-container { height: 320px; overflow: hidden; border-radius: 8px; }
+
+/* SUMO placeholder */
+.sumo-placeholder { height: 320px; display:flex; align-items:center; justify-content:center; background:#111827; color:#fff; border-radius:8px; }
+
+/* Utility */
+.text-primary { color: var(--primary); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: linear-gradient(180deg,#f1f5f9,#eef2ff); }
+::-webkit-scrollbar-thumb { background: linear-gradient(45deg,var(--primary),var(--accent)); border-radius: 8px; }
+
+
+
