@@ -1,6 +1,6 @@
 # Welcome to Project
 Application Link URL
-    URL:https://medo.dev/projects/app-7s77jxtvslq9
+    URL:https://smart-traffic-management-system-rfgjfa8mm.vercel.app
 
 # 🚦 Smart Traffic Management System
 
