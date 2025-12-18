@@ -1,7 +1,10 @@
 import { supabase } from './supabase';
 import type { Profile, VehicleDetection, TrafficSignal, Violation, TrafficFlow } from '@/types/types';
 
-const isMock = !import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_MOCK_MODE === '1';
+const isMock = !import.meta.env.VITE_SUPABASE_URL || 
+  !import.meta.env.VITE_SUPABASE_ANON_KEY || 
+  import.meta.env.VITE_MOCK_MODE === '1' || 
+  import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co';
 
 const mock = {
   profiles(count = 3): Profile[] {
