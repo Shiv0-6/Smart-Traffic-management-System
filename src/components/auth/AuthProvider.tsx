@@ -19,6 +19,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const restoreMockSession = () => {
+    const storedProfile = localStorage.getItem('mockAdminProfile');
+    if (!storedProfile) return false;
+    try {
+      const parsedProfile = JSON.parse(storedProfile) as Profile;
+      const mockUser = {
+        id: parsedProfile.id,
+        email: parsedProfile.email,
+      } as User;
+      setUser(mockUser);
+      setProfile(parsedProfile);
+      return true;
+    } catch (error) {
+      console.error('Failed to parse mock admin profile', error);
+      localStorage.removeItem('mockAdminProfile');
+      localStorage.removeItem('mockAdminSession');
+      return false;
+    }
+  };
+
   const fetchProfile = async (userId: string) => {
     try {
       const profileData = await profilesApi.getById(userId);
@@ -35,20 +55,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    const restored = restoreMockSession();
+
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+      if (!restored) {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        }
       }
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+      if (!session) {
+        const wasRestored = restoreMockSession();
+        if (!wasRestored) {
+          setUser(null);
+          setProfile(null);
+        }
       } else {
-        setProfile(null);
+        setUser(session.user);
+        fetchProfile(session.user.id);
       }
       setLoading(false);
     });
@@ -56,8 +84,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
+  // Ensure mock admin session is applied if localStorage was set during the current session
+  useEffect(() => {
+    if (!user && !profile) {
+      restoreMockSession();
+    }
+  }, [user, profile]);
+
   const signOut = async () => {
     await supabase.auth.signOut();
+    localStorage.removeItem('mockAdminSession');
+    localStorage.removeItem('mockAdminProfile');
     setUser(null);
     setProfile(null);
   };

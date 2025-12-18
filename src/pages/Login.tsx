@@ -14,6 +14,8 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const defaultUsername = import.meta.env.VITE_DEFAULT_ADMIN_USER || 'admin';
+  const defaultPassword = import.meta.env.VITE_DEFAULT_ADMIN_PASS || 'admin123';
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
@@ -37,6 +39,23 @@ const Login: React.FC = () => {
       return;
     }
 
+    // Default admin shortcut (full control)
+    if (username === defaultUsername && password === defaultPassword) {
+      const mockProfile = {
+        id: 'mock-admin',
+        username: defaultUsername,
+        email: `${defaultUsername}@demo.local`,
+        role: 'admin',
+        created_at: new Date().toISOString(),
+      };
+      localStorage.setItem('mockAdminSession', 'true');
+      localStorage.setItem('mockAdminProfile', JSON.stringify(mockProfile));
+      toast.success('Logged in as default admin');
+      const from = (location.state as any)?.from || '/';
+      navigate(from);
+      return;
+    }
+
     setLoading(true);
     try {
       const email = `${username}@miaoda.com`;
@@ -57,47 +76,9 @@ const Login: React.FC = () => {
     }
   };
 
+  // Registration disabled in favor of default admin
   const handleSignup = async () => {
-    if (!username || !password) {
-      toast.error('Please enter username and password');
-      return;
-    }
-
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      toast.error('Username can only contain letters, numbers, and underscores');
-      return;
-    }
-
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const email = `${username}@miaoda.com`;
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            username,
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      if (data.user) {
-        toast.success('Registration successful! Logging in...');
-        const from = (location.state as any)?.from || '/';
-        navigate(from);
-      }
-    } catch (error: any) {
-      toast.error(error.message || 'Registration failed');
-    } finally {
-      setLoading(false);
-    }
+    toast.error('Registration is disabled. Use the default admin credentials below.');
   };
 
   return (
@@ -194,28 +175,24 @@ const Login: React.FC = () => {
                 disabled={loading}
               >
                 <UserPlus className="h-4 w-4 mr-2" />
-                Create Account
+                Registration Disabled
               </Button>
             </div>
           </form>
           <div className="mt-6 space-y-3">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Admin Access
-                </span>
-              </div>
-            </div>
             <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg space-y-2">
               <div className="flex items-center gap-2 text-sm">
                 <Shield className="h-4 w-4 text-primary" />
-                <span className="font-medium">First user becomes admin</span>
+                <span className="font-medium">Default Admin Credentials</span>
               </div>
               <p className="text-xs text-muted-foreground">
-                The first registered user automatically receives administrator privileges with full system access.
+                Username: <span className="font-semibold text-foreground">{defaultUsername}</span>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Password: <span className="font-semibold text-foreground">{defaultPassword}</span>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                This account has full editing and control permissions.
               </p>
             </div>
             <div className="text-center">
