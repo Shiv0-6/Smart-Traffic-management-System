@@ -23,7 +23,7 @@ import {
 
 const SignalControl: React.FC = () => {
   const { profile } = useAuth();
-  const { isAdmin } = useAdmin();
+  const { isAdmin: isAdminRole } = useAdmin();
   const [signals, setSignals] = useState<TrafficSignal[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSignal, setSelectedSignal] = useState<TrafficSignal | null>(null);
@@ -32,6 +32,8 @@ const SignalControl: React.FC = () => {
   const [websterRecommendation, setWebsterRecommendation] = useState<any>(null);
 
   const isOperator = profile?.role === 'admin' || profile?.role === 'operator';
+  const isAdmin = isAdminRole || profile?.role === 'admin';
+  const controlUserId = profile?.id;
 
   useEffect(() => {
     loadSignals();
@@ -77,16 +79,16 @@ const SignalControl: React.FC = () => {
   };
 
   const handleModeToggle = async (signal: TrafficSignal) => {
-    if (!isOperator) {
-      toast.error('Only operators and admins can control signals');
+    if (!isOperator || !controlUserId) {
+      toast.error('Only operators and admins can control signals. Please sign in.');
       return;
     }
 
     try {
       const newMode = signal.mode === 'auto' ? 'manual' : 'auto';
-      await trafficSignalsApi.updateMode(signal.id, newMode, profile!.id);
+      const updated = await trafficSignalsApi.updateMode(signal.id, newMode, controlUserId);
+      setSignals((prev) => prev.map((s) => (s.id === signal.id ? { ...s, ...updated } : s)));
       toast.success(`Signal mode changed to ${newMode}`);
-      loadSignals();
     } catch (error: any) {
       toast.error('Failed to update signal mode');
       console.error(error);
@@ -94,8 +96,8 @@ const SignalControl: React.FC = () => {
   };
 
   const handleStatusChange = async (signal: TrafficSignal, newStatus: string) => {
-    if (!isOperator) {
-      toast.error('Only operators and admins can control signals');
+    if (!isOperator || !controlUserId) {
+      toast.error('Only operators and admins can control signals. Please sign in.');
       return;
     }
 
@@ -105,9 +107,9 @@ const SignalControl: React.FC = () => {
     }
 
     try {
-      await trafficSignalsApi.updateStatus(signal.id, newStatus, profile!.id);
+      const updated = await trafficSignalsApi.updateStatus(signal.id, newStatus, controlUserId);
+      setSignals((prev) => prev.map((s) => (s.id === signal.id ? { ...s, ...updated } : s)));
       toast.success(`Signal status changed to ${newStatus}`);
-      loadSignals();
     } catch (error: any) {
       toast.error('Failed to update signal status');
       console.error(error);
@@ -115,12 +117,15 @@ const SignalControl: React.FC = () => {
   };
 
   const handleTimingUpdate = async () => {
-    if (!isOperator || !selectedSignal) return;
+    if (!isOperator || !selectedSignal || !controlUserId) {
+      toast.error('Only operators and admins can control signals. Please sign in.');
+      return;
+    }
 
     try {
-      await trafficSignalsApi.updateTiming(selectedSignal.id, timingConfig, profile!.id);
+      const updated = await trafficSignalsApi.updateTiming(selectedSignal.id, timingConfig, controlUserId);
+      setSignals((prev) => prev.map((s) => (s.id === selectedSignal.id ? { ...s, ...updated } : s)));
       toast.success('Timing configuration updated');
-      loadSignals();
       setSelectedSignal(null);
     } catch (error: any) {
       toast.error('Failed to update timing');
@@ -159,7 +164,7 @@ const SignalControl: React.FC = () => {
               Signal Control
             </h1>
             <p className="text-muted-foreground mt-2">
-              {isOperator ? 'Manage traffic signal timing and modes' : 'View traffic signal status (read-only)'}
+              {isOperator ? 'Manage traffic signal timing and modes' : 'View traffic signal status (read-only). Sign in as admin/operator to control.'}
             </p>
           </div>
           {isAdmin ? (

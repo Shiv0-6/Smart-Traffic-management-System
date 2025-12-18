@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Car, Activity, AlertTriangle, Gauge, TrendingUp, Clock, Zap, Map as MapIcon, Wifi } from 'lucide-react';
 import { StatCard } from '@/components/common/StatCard';
-import { TrafficMap } from '@/components/common/TrafficMap';
+import { GoogleTrafficMap } from '@/components/common/GoogleTrafficMap';
 import LeafletTrafficMap from '@/components/maps/LeafletTrafficMap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -95,18 +95,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getCongestionColor = (level: string | null) => {
-    switch (level?.toLowerCase()) {
-      case 'low':
-        return 'text-success';
-      case 'medium':
-        return 'text-warning';
-      case 'high':
-        return 'text-destructive';
-      default:
-        return 'text-muted-foreground';
-    }
-  };
+  //
 
   if (loading) {
     return (
@@ -188,14 +177,14 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-3 grid-cols-1">
-        <Card className="xl:col-span-2 border-primary/20 shadow-lg glass-card">
+      <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
+        <Card className="border-primary/20 shadow-lg glass-card">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-primary" />
-                  Live Traffic Map
+                  <MapIcon className="h-5 w-5 text-primary" />
+                  Google Traffic Map
                 </CardTitle>
                 <CardDescription>Interactive real-time traffic visualization with Google Maps</CardDescription>
               </div>
@@ -205,18 +194,47 @@ const Dashboard: React.FC = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="rounded-lg overflow-hidden border border-primary/20 shadow-md">
-                <TrafficMap signals={signals} flowData={flowData} />
+            <div className="space-y-2">
+              <div className="rounded-lg overflow-hidden border border-primary/20 shadow-md" style={{ height: '500px' }}>
+                <GoogleTrafficMap signals={signals} />
               </div>
               <div className="text-xs text-muted-foreground text-center">
-                💡 Tip: Click on markers for detailed signal information
+                🗺️ Google Maps with traffic layer and signal markers
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-primary/30 shadow-lg glass-card hover:shadow-xl transition-shadow">
+        <Card className="border-accent/20 shadow-lg glass-card">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <MapIcon className="h-5 w-5 text-accent" />
+                  Google Map (Standard)
+                </CardTitle>
+                <CardDescription>Standard Google Map without the traffic overlay</CardDescription>
+              </div>
+              <Badge variant="outline" className="border-accent text-accent">
+                Standard
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="rounded-lg overflow-hidden border border-accent/20 shadow-md" style={{ height: '500px' }}>
+                <GoogleTrafficMap signals={signals} trafficLayer={false} mapStyles={null} />
+              </div>
+              <div className="text-xs text-muted-foreground text-center">
+                🗺️ Clean Google Map view without traffic layer
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-3 grid-cols-1">
+        <Card className="xl:col-span-2 border-primary/30 shadow-lg glass-card hover:shadow-xl transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
@@ -241,7 +259,7 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="space-y-6">
+        <div className="space-y-6 col-span-1">
           <Card className="border-accent/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">

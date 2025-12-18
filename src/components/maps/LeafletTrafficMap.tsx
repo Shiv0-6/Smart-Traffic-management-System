@@ -14,9 +14,21 @@ interface LeafletTrafficMapProps {
   showTrafficLayer?: boolean;
 }
 
+// Prefer env-configured default center; fall back to a sensible non-NY default.
+const envCenter = (() => {
+  const raw = import.meta.env.VITE_MAP_DEFAULT_CENTER as string | undefined;
+  if (!raw) return null;
+  const parts = raw.split(',').map((p) => parseFloat(p.trim()));
+  return parts.length === 2 && parts.every(Number.isFinite)
+    ? ([parts[0], parts[1]] as [number, number])
+    : null;
+})();
+
+const defaultCenter: [number, number] = envCenter ?? [28.6139, 77.209]; // Default to New Delhi if not provided
+
 const LeafletTrafficMap: React.FC<LeafletTrafficMapProps> = ({
   signals = [],
-  center = [40.7128, -74.006],
+  center = defaultCenter,
   zoom = 13,
   showTrafficLayer = true,
 }) => {

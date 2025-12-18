@@ -6,7 +6,7 @@ import ViolationManagement from './pages/ViolationManagement';
 import DataAnalysis from './pages/DataAnalysis';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
-import AdvancedTraffic from './pages/AdvancedTraffic';
+import AdvancedTraffic from './pages/GoogleTraffic';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {

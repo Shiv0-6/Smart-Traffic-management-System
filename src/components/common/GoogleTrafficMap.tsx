@@ -8,6 +8,8 @@ import type { TrafficSignal } from '@/types/types';
 interface GoogleTrafficMapProps {
   signals: TrafficSignal[];
   className?: string;
+  trafficLayer?: boolean; // enable/disable traffic overlay
+  mapStyles?: any[] | null; // null => default Google styling
 }
 
 declare global {
@@ -17,14 +19,52 @@ declare global {
   }
 }
 
-export const GoogleTrafficMap: React.FC<GoogleTrafficMapProps> = ({ signals, className }) => {
+export const GoogleTrafficMap: React.FC<GoogleTrafficMapProps> = ({
+  signals,
+  className,
+  trafficLayer = true,
+  mapStyles,
+}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<any>(null);
-  const [trafficLayer, setTrafficLayer] = useState<any>(null);
+  const [trafficLayerInstance, setTrafficLayerInstance] = useState<any>(null);
   const [markers, setMarkers] = useState<any[]>([]);
-  const [showTraffic, setShowTraffic] = useState(true);
+  const [showTraffic, setShowTraffic] = useState(trafficLayer);
   const [selectedSignal, setSelectedSignal] = useState<TrafficSignal | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+
+  const defaultStyles = [
+    {
+      featureType: 'all',
+      elementType: 'geometry',
+      stylers: [{ color: '#1a2332' }]
+    },
+    {
+      featureType: 'all',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#8ec3b9' }]
+    },
+    {
+      featureType: 'all',
+      elementType: 'labels.text.stroke',
+      stylers: [{ color: '#1a2332' }]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{ color: '#2c3e50' }]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#1a2332' }]
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{ color: '#0e1626' }]
+    }
+  ];
 
   const locations = [
     { name: 'Main St & 1st Ave', lat: 40.7580, lng: -73.9855 },
@@ -83,45 +123,18 @@ export const GoogleTrafficMap: React.FC<GoogleTrafficMapProps> = ({ signals, cla
       mapTypeControl: true,
       streetViewControl: true,
       fullscreenControl: true,
-      styles: [
-        {
-          featureType: 'all',
-          elementType: 'geometry',
-          stylers: [{ color: '#1a2332' }]
-        },
-        {
-          featureType: 'all',
-          elementType: 'labels.text.fill',
-          stylers: [{ color: '#8ec3b9' }]
-        },
-        {
-          featureType: 'all',
-          elementType: 'labels.text.stroke',
-          stylers: [{ color: '#1a2332' }]
-        },
-        {
-          featureType: 'road',
-          elementType: 'geometry',
-          stylers: [{ color: '#2c3e50' }]
-        },
-        {
-          featureType: 'road',
-          elementType: 'geometry.stroke',
-          stylers: [{ color: '#1a2332' }]
-        },
-        {
-          featureType: 'water',
-          elementType: 'geometry',
-          stylers: [{ color: '#0e1626' }]
-        }
-      ]
+      styles: mapStyles === null ? undefined : (mapStyles || defaultStyles),
     });
 
-    const traffic = new window.google.maps.TrafficLayer();
-    traffic.setMap(mapInstance);
+    if (trafficLayer) {
+      const traffic = new window.google.maps.TrafficLayer();
+      if (showTraffic) {
+        traffic.setMap(mapInstance);
+      }
+      setTrafficLayerInstance(traffic);
+    }
 
     setMap(mapInstance);
-    setTrafficLayer(traffic);
   };
 
   const updateMarkers = () => {
@@ -200,11 +213,11 @@ export const GoogleTrafficMap: React.FC<GoogleTrafficMapProps> = ({ signals, cla
   };
 
   const toggleTrafficLayer = () => {
-    if (trafficLayer && map) {
+    if (trafficLayerInstance && map) {
       if (showTraffic) {
-        trafficLayer.setMap(null);
+        trafficLayerInstance.setMap(null);
       } else {
-        trafficLayer.setMap(map);
+        trafficLayerInstance.setMap(map);
       }
       setShowTraffic(!showTraffic);
     }
@@ -261,16 +274,18 @@ export const GoogleTrafficMap: React.FC<GoogleTrafficMapProps> = ({ signals, cla
         className="w-full h-full min-h-[500px] rounded-lg overflow-hidden border border-border"
       />
       
-      <div className="absolute top-4 right-4 space-y-2">
-        <Button
-          size="sm"
-          variant={showTraffic ? "default" : "outline"}
-          onClick={toggleTrafficLayer}
-          className="shadow-lg"
-        >
-          {showTraffic ? 'Hide' : 'Show'} Traffic
-        </Button>
-      </div>
+      {trafficLayer && trafficLayerInstance && (
+        <div className="absolute top-4 right-4 space-y-2">
+          <Button
+            size="sm"
+            variant={showTraffic ? "default" : "outline"}
+            onClick={toggleTrafficLayer}
+            className="shadow-lg"
+          >
+            {showTraffic ? 'Hide' : 'Show'} Traffic
+          </Button>
+        </div>
+      )}
 
       <div className="absolute bottom-4 left-4 bg-card/95 backdrop-blur-sm border rounded-lg p-3 shadow-lg">
         <div className="space-y-2 text-xs">

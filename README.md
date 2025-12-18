@@ -110,47 +110,214 @@ An AI-driven intelligent traffic management system with real-time vehicle detect
 ## 🚀 Quick Start
 
 ### Prerequisites
-```bash
+```
 Node.js ≥ 20
-npm or pnpm
+npm or pnpm (pnpm 9.12.0 recommended)
 ```
 
-### Installation
+### 1️⃣ Installation & Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd app-7s77jxtvslq9
-   ```
+```bash
+# Clone or navigate to project
+cd Smart-Traffic-management-System
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   pnpm install
-   ```
+# Install dependencies
+pnpm install
+# or: npm install
 
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add your credentials:
-   ```env
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key  # Optional
-   ```
+# Copy environment template
+cp .env.example .env
+```
 
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
+### 2️⃣ Configure Environment Variables
 
-5. **Create your account**
-   - Open the application in your browser
-   - Click "Create Account" on the login page
-   - First user automatically becomes Administrator
+Edit `.env` in the project root:
+
+```env
+# Option A: Use with Supabase (Real Database)
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Option B: Use Mock Data (No Setup Required)
+VITE_MOCK_MODE=1
+
+# Optional: Socket.io Server for real-time updates
+VITE_SOCKET_URL=http://localhost:3001
+
+# Optional: Google Maps (Dashboard map with traffic layer)
+VITE_GOOGLE_MAPS_API_KEY=your_api_key
+```
+
+**Default `.env` is already configured** with:
+- ✅ Supabase credentials (live database)
+- ✅ Mock mode fallback
+- No additional setup needed!
+
+### 3️⃣ Run Development Server
+
+```bash
+pnpm run dev
+# or: npm run dev
+```
+
+Then open **http://localhost:5174** (or shown port in terminal).
+
+### 4️⃣ View the App
+
+- 📊 **Dashboard**: Real-time traffic overview with maps and alerts
+- 🚗 **Vehicle Detection**: Count and classify vehicles by type
+- 🚦 **Traffic Simulation**: SUMO-based flow visualization
+- 🔴 **Signal Control**: Manage traffic light timing and status
+- ⚠️ **Violations**: Review detected traffic violations
+- 📈 **Data Analysis**: Analytics and trend reports
+- ⚙️ **Settings**: System configuration
+
+**No login required** — all features are accessible publicly! Admin controls appear after login.
+
+## 🏗️ Production Build
+
+```bash
+# Build for production
+pnpm run build
+
+# Output goes to: dist/
+# Built files are optimized and minified (~1.5 MB gzipped)
+```
+
+## 🌐 Deployment
+
+### Deploy to Vercel (Recommended)
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy
+vercel
+
+# Production URL will be: https://your-app.vercel.app
+```
+
+**Vercel Configuration** (already in `vercel.json`):
+```json
+{
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install --frozen-lockfile=false",
+  "outputDirectory": "dist"
+}
+```
+
+### Environment Variables in Vercel
+
+1. Go to Vercel Dashboard → Project → Settings → Environment Variables
+2. Add:
+   ```
+   VITE_SUPABASE_URL
+   VITE_SUPABASE_ANON_KEY
+   VITE_MOCK_MODE (optional)
+   VITE_GOOGLE_MAPS_API_KEY (optional)
+   ```
+3. Redeploy
+
+### Deploy Anywhere (Docker/Custom)
+
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY . .
+RUN pnpm install && pnpm run build
+EXPOSE 3000
+CMD ["npm", "run", "preview"]
+```
+
+```bash
+docker build -t traffic-app .
+docker run -p 3000:3000 traffic-app
+```
+
+## 📋 Configuration Reference
+
+### Environment Variables
+
+| Variable | Required | Default | Purpose |
+|----------|----------|---------|---------|
+| `VITE_SUPABASE_URL` | No* | — | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | No* | — | Supabase anon key |
+| `VITE_MOCK_MODE` | No | 0 | Use fake data (1 = enabled) |
+| `VITE_SOCKET_URL` | No | http://localhost:3001 | Real-time updates server |
+| `VITE_GOOGLE_MAPS_API_KEY` | No | — | Maps JS API key |
+
+\* *Not required if `VITE_MOCK_MODE=1` (default fallback)*
+
+### Available Scripts
+
+```bash
+pnpm run dev       # Start dev server
+pnpm run build     # Production build
+pnpm run lint      # Run linter (Biome)
+pnpm run preview   # Test production build locally
+```
+
+## 🔐 Features Included
+
+- ✅ **Real-time Dashboard** with live traffic maps
+- ✅ **Mock Data Layer** (zero-setup demo mode)
+- ✅ **Supabase Integration** (for production)
+- ✅ **Dark Mode** with theme persistence
+- ✅ **Responsive Design** (mobile, tablet, desktop)
+- ✅ **TypeScript** for type safety
+- ✅ **Tailwind CSS** for styling
+- ✅ **shadcn/ui** components
+- ✅ **React Router v7** for navigation
+- ✅ **Socket.io Support** for WebSocket updates
+- ✅ **Chart.js & Recharts** for analytics
+
+## 🐛 Troubleshooting
+
+### Dev server won't start
+```bash
+# Clear cache and reinstall
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+```
+
+### Supabase connection failing
+```env
+# Switch to mock mode temporarily
+VITE_MOCK_MODE=1
+```
+
+### Port 5174 already in use
+Vite will auto-select next available port (5175, 5176, etc.)
+
+### Google Maps not loading
+- Check `VITE_GOOGLE_MAPS_API_KEY` in `.env`
+- Verify API is enabled in Google Cloud Console
+- Maps will gracefully degrade without the key
+
+## 📚 Additional Resources
+
+- [React Docs](https://react.dev)
+- [TypeScript Handbook](https://www.typescriptlang.org)
+- [Supabase Docs](https://supabase.io/docs)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Vite Guide](https://vitejs.dev)
+
+## 🤝 Support
+
+For issues, check:
+1. **Environment Variables** — Verify `.env` is configured
+2. **Dependencies** — Run `pnpm install` again
+3. **Node Version** — Ensure Node ≥ 20
+4. **Browser Console** — Check for error messages
+5. **Network Tab** — Verify API calls (or mock mode is active)
+
+---
+
+**Application is now READY for production use! 🚀**
+
+Start with `pnpm run dev` and access http://localhost:5174
+
 
 ## 📖 Documentation
 

@@ -9,15 +9,12 @@ import { Upload, Video, Car, Bus, Bike, Truck, Activity } from 'lucide-react';
 import { vehicleDetectionsApi } from '@/db/api';
 import type { VehicleDetection as VehicleDetectionType } from '@/types/types';
 import { toast } from 'sonner';
-import { useAuth } from '@/components/auth/AuthProvider';
 import { DeepSORTTracker } from '@/utils/traffic/deepSort';
 
 const VehicleDetection: React.FC = () => {
-  const { profile } = useAuth();
   const [detections, setDetections] = useState<VehicleDetectionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
-  const [videoFile, setVideoFile] = useState<File | null>(null);
   const trackerRef = useRef<DeepSORTTracker>(new DeepSORTTracker());
   const [trackedVehicles, setTrackedVehicles] = useState<any[]>([]);
   const [pcuCount, setPcuCount] = useState<number>(0);
@@ -66,7 +63,6 @@ const VehicleDetection: React.FC = () => {
         toast.error('File size must be less than 100MB');
         return;
       }
-      setVideoFile(file);
       toast.success('Video file selected. In production, this would be sent to YOLO detection service.');
     }
   };
@@ -86,11 +82,6 @@ const VehicleDetection: React.FC = () => {
         return <Car className="h-4 w-4" />;
     }
   };
-
-  const vehicleStats = detections.reduce((acc, detection) => {
-    acc[detection.vehicle_type] = (acc[detection.vehicle_type] || 0) + detection.count;
-    return acc;
-  }, {} as Record<string, number>);
 
   return (
     <div className="container mx-auto p-6 space-y-6">
