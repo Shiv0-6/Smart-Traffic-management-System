@@ -72,11 +72,11 @@ const AdvancedTraffic: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="animate-pulse">
+          <Badge variant="outline" className="animate-pulse shadow-sm">
             <div className="w-2 h-2 rounded-full bg-success mr-2"></div>
             LIVE DATA
           </Badge>
-          <Button variant="outline" size="sm" onClick={loadData}>
+          <Button variant="outline" size="sm" onClick={loadData} className="shadow-sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
@@ -120,7 +120,7 @@ const AdvancedTraffic: React.FC = () => {
 
         <TabsContent value="map" className="space-y-6">
           <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
-            <Card className="border-primary/20 shadow-lg">
+            <Card className="border-primary/20 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -132,7 +132,7 @@ const AdvancedTraffic: React.FC = () => {
                       Real-time traffic conditions with signal status overlay
                     </CardDescription>
                   </div>
-                  <Badge variant="default" className="gradient-primary">
+                  <Badge variant="default" className="gradient-primary shadow-sm">
                     Google Maps API
                   </Badge>
                 </div>
@@ -142,7 +142,7 @@ const AdvancedTraffic: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-accent/20 shadow-lg">
+            <Card className="border-accent/20 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -154,7 +154,7 @@ const AdvancedTraffic: React.FC = () => {
                       Free, open-source mapping with CartoDB tiles
                     </CardDescription>
                   </div>
-                  <Badge variant="outline" className="border-accent text-accent">
+                  <Badge variant="outline" className="border-accent text-accent shadow-sm">
                     Leaflet.js
                   </Badge>
                 </div>
@@ -165,27 +165,27 @@ const AdvancedTraffic: React.FC = () => {
             </Card>
           </div>
 
-          <Card className="border-accent/20 shadow-lg">
+          <Card className="border-accent/20 shadow-lg hover:shadow-xl transition-shadow">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <MapPin className="h-5 w-5 text-accent" />
-                    Standard Map View
+                    Google Map (Standard View)
                   </CardTitle>
                   <CardDescription>
-                    Clean map visualization with traffic signal markers
+                    Clean Google Map visualization without traffic overlay
                   </CardDescription>
                 </div>
-                <Badge variant="outline" className="border-accent text-accent">
-                  Standard
+                <Badge variant="outline" className="border-accent text-accent shadow-sm">
+                  Google Maps
                 </Badge>
               </div>
             </CardHeader>
             <CardContent>
-              <LeafletTrafficMap signals={filteredSignals} zoom={14} />
+              <GoogleTrafficMap signals={filteredSignals} trafficLayer={false} mapStyles={null} />
               <div className="text-xs text-muted-foreground text-center mt-3">
-                📍 All signals and traffic locations for {selectedLocation === 'all' ? 'your region' : selectedLocation}
+                🗺️ Standard Google Map for {selectedLocation === 'all' ? 'all locations' : selectedLocation}
               </div>
             </CardContent>
           </Card>

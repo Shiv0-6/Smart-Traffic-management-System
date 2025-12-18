@@ -119,14 +119,14 @@ const Dashboard: React.FC = () => {
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-lg shadow-sm">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
             <span className="text-sm font-medium">System Online</span>
           </div>
-          <div className={`flex items-center gap-2 px-4 py-2 border rounded-lg ${
+          <div className={`flex items-center gap-2 px-4 py-2 border rounded-lg shadow-sm ${
             isConnected 
-              ? 'bg-green-500/10 border-green-500/20' 
-              : 'bg-red-500/10 border-red-500/20'
+              ? 'bg-green-500/10 border-green-500/30' 
+              : 'bg-red-500/10 border-red-500/30'
           }`}>
             <Wifi className={`h-4 w-4 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />
             <span className="text-sm font-medium">
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
-        <Card className="border-primary/20 shadow-lg glass-card">
+        <Card className="border-primary/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -188,14 +188,14 @@ const Dashboard: React.FC = () => {
                 </CardTitle>
                 <CardDescription>Interactive real-time traffic visualization with Google Maps</CardDescription>
               </div>
-              <Badge variant="outline" className="animate-pulse border-primary text-primary">
+              <Badge variant="outline" className="animate-pulse border-primary text-primary shadow-sm">
                 LIVE
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="rounded-lg overflow-hidden border border-primary/20 shadow-md" style={{ height: '500px' }}>
+              <div className="rounded-lg overflow-hidden border border-primary/30 shadow-md" style={{ height: '500px' }}>
                 <GoogleTrafficMap signals={signals} />
               </div>
               <div className="text-xs text-muted-foreground text-center">
@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-accent/20 shadow-lg glass-card">
+        <Card className="border-accent/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -215,14 +215,14 @@ const Dashboard: React.FC = () => {
                 </CardTitle>
                 <CardDescription>Standard Google Map without the traffic overlay</CardDescription>
               </div>
-              <Badge variant="outline" className="border-accent text-accent">
+              <Badge variant="outline" className="border-accent text-accent shadow-sm">
                 Standard
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="rounded-lg overflow-hidden border border-accent/20 shadow-md" style={{ height: '500px' }}>
+              <div className="rounded-lg overflow-hidden border border-accent/30 shadow-md" style={{ height: '500px' }}>
                 <GoogleTrafficMap signals={signals} trafficLayer={false} mapStyles={null} />
               </div>
               <div className="text-xs text-muted-foreground text-center">
@@ -241,7 +241,7 @@ const Dashboard: React.FC = () => {
                 <MapIcon className="h-5 w-5 text-primary" />
                 OpenStreetMap Traffic View
               </CardTitle>
-              <Badge variant="outline" className="border-primary text-primary">
+              <Badge variant="outline" className="border-primary text-primary shadow-sm">
                 Leaflet.js
               </Badge>
             </div>
@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg overflow-hidden border border-primary/20 shadow-md">
+            <div className="rounded-lg overflow-hidden border border-primary/30 shadow-md">
               <LeafletTrafficMap signals={signals} />
             </div>
             <div className="text-xs text-muted-foreground text-center mt-3">
