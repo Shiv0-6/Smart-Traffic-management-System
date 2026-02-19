@@ -115,44 +115,6 @@ Node.js ≥ 20
 npm or pnpm (pnpm 9.12.0 recommended)
 ```
 
-### 1️⃣ Installation & Setup
-
-```bash
-# Clone or navigate to project
-cd Smart-Traffic-management-System
-
-# Install dependencies
-pnpm install
-# or: npm install
-
-# Copy environment template
-cp .env.example .env
-```
-
-### 2️⃣ Configure Environment Variables
-
-Edit `.env` in the project root:
-
-```env
-# Option A: Use with Supabase (Real Database)
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Option B: Use Mock Data (No Setup Required)
-VITE_MOCK_MODE=1
-
-# Optional: Socket.io Server for real-time updates
-VITE_SOCKET_URL=http://localhost:3001
-
-# Optional: Google Maps (Dashboard map with traffic layer)
-VITE_GOOGLE_MAPS_API_KEY=your_api_key
-```
-
-**Default `.env` is already configured** with:
-- ✅ Supabase credentials (live database)
-- ✅ Mock mode fallback
-- No additional setup needed!
-
 ### 3️⃣ Run Development Server
 
 ```bash
@@ -184,70 +146,8 @@ pnpm run build
 # Built files are optimized and minified (~1.5 MB gzipped)
 ```
 
-## 🌐 Deployment
 
-### Deploy to Vercel (Recommended)
 
-```bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Deploy
-vercel
-
-# Production URL will be: https://your-app.vercel.app
-```
-
-**Vercel Configuration** (already in `vercel.json`):
-```json
-{
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile=false",
-  "outputDirectory": "dist"
-}
-```
-
-### Environment Variables in Vercel
-
-1. Go to Vercel Dashboard → Project → Settings → Environment Variables
-2. Add:
-   ```
-   VITE_SUPABASE_URL
-   VITE_SUPABASE_ANON_KEY
-   VITE_MOCK_MODE (optional)
-   VITE_GOOGLE_MAPS_API_KEY (optional)
-   ```
-3. Redeploy
-
-### Deploy Anywhere (Docker/Custom)
-
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY . .
-RUN pnpm install && pnpm run build
-EXPOSE 3000
-CMD ["npm", "run", "preview"]
-```
-
-```bash
-docker build -t traffic-app .
-docker run -p 3000:3000 traffic-app
-```
-
-## 📋 Configuration Reference
-
-### Environment Variables
-
-| Variable | Required | Default | Purpose |
-|----------|----------|---------|---------|
-| `VITE_SUPABASE_URL` | No* | — | Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | No* | — | Supabase anon key |
-| `VITE_MOCK_MODE` | No | 0 | Use fake data (1 = enabled) |
-| `VITE_SOCKET_URL` | No | http://localhost:3001 | Real-time updates server |
-| `VITE_GOOGLE_MAPS_API_KEY` | No | — | Maps JS API key |
-
-\* *Not required if `VITE_MOCK_MODE=1` (default fallback)*
 
 ### Available Scripts
 
@@ -314,7 +214,6 @@ For issues, check:
 
 ---
 
-**Application is now READY for production use! 🚀**
 
 Start with `pnpm run dev` and access http://localhost:5174
 
@@ -392,28 +291,6 @@ Start with `pnpm run dev` and access http://localhost:5174
 - **Google Places API** - Location services (optional)
 - **Google Directions API** - Route planning (optional)
 
-## 🎨 Design System
-
-### Color Palette
-```css
---primary: #3B82F6        /* Blue - Primary actions */
---accent: #06B6D4         /* Cyan - Highlights */
---success: #22C55E        /* Green - Success states */
---warning: #EAB308        /* Yellow - Warnings */
---destructive: #EF4444    /* Red - Errors/Alerts */
---background: #1F2937     /* Dark gray - Background */
---card: #2D3748           /* Darker gray - Cards */
-```
-
-### Custom Utilities
-- `.gradient-primary` - Blue gradient background
-- `.gradient-accent` - Cyan gradient background
-- `.gradient-text` - Gradient text effect
-- `.glass-card` - Glass morphism effect
-- `.glow-primary` - Blue glow shadow
-- `.traffic-light-*` - Animated traffic light effects
-
-## 📊 Database Schema
 
 ### Tables
 - **profiles** - User accounts and roles
@@ -421,62 +298,6 @@ Start with `pnpm run dev` and access http://localhost:5174
 - **traffic_signals** - Traffic light status and configuration
 - **violations** - Traffic violation records
 - **traffic_flow** - Traffic flow measurements
-
-### Sample Data
-The system includes demonstration data:
-- 17 vehicle detection records
-- 12 traffic flow measurements
-- 8 traffic violations
-- 4 traffic signal locations
-
-## 🔐 Security
-
-- **Authentication**: Supabase Auth with secure sessions
-- **Authorization**: Role-based access control (RBAC)
-- **Row Level Security**: Database-level access control
-- **API Key Protection**: Environment variables
-- **HTTPS Only**: Secure data transmission
-
-## 🚀 Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-### Preview Production Build
-```bash
-npm run preview
-```
-
-### Deploy to Vercel/Netlify
-1. Connect your repository
-2. Set environment variables
-3. Deploy automatically on push
-
-## 🧪 Development
-
-### Linting
-```bash
-npm run lint
-```
-
-### Type Checking
-```bash
-npm run type-check
-```
-
-### Code Formatting
-```bash
-npm run format
-```
-
-## 📈 Performance
-
-- **Lighthouse Score**: 95+ (Performance, Accessibility, Best Practices)
-- **Bundle Size**: Optimized with code splitting
-- **Load Time**: < 2s on 3G connection
-- **Real-time Updates**: < 2s latency
 
 ## 🤝 Contributing
 
