@@ -1,5 +1,9 @@
 # Experiment 5 - Sequence Diagram (SE Lab)
 
+## Theory
+Sequence diagrams model time-ordered interactions between actors and system modules.  
+They are useful for validating message flow, decision points, and real-time behaviors.
+
 ## Scenario 1: Adaptive Traffic Signal Control During Congestion
 
 ```mermaid
@@ -47,3 +51,8 @@ sequenceDiagram
         Detector-->>Service: No action required
     end
 ```
+
+## Result
+Two sequence-diagram scenarios were prepared:
+1. Adaptive traffic signal control during congestion
+2. Red-light violation detection and alert workflow
