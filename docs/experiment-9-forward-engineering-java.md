@@ -28,7 +28,7 @@ classDiagram
     }
 
     TrafficController --> TrafficSignal
-    TrafficController --> Violation
+    TrafficController ..> Violation
 ```
 
 ## Java Code (Model-to-Code Output)

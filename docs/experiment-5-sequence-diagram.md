@@ -1,7 +1,7 @@
 # Experiment 5 - Sequence Diagram (SE Lab)
 
 ## Theory
-Sequence diagrams model time-ordered interactions between actors and system modules.  
+Sequence diagrams model time-ordered interactions between actors and system modules.
 They are useful for validating message flow, decision points, and real-time behaviors.
 
 ## Scenario 1: Adaptive Traffic Signal Control During Congestion
