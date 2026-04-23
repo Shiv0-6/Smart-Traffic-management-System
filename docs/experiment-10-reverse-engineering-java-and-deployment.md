@@ -29,8 +29,8 @@ class AlertService {
 ```mermaid
 classDiagram
     class SensorNode {
-        +String sensorId
-        +String location
+        -String sensorId
+        -String location
     }
 
     class TrafficProcessor {

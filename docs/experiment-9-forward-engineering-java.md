@@ -31,6 +31,9 @@ classDiagram
     TrafficController ..> Violation
 ```
 
+Note: `TrafficController --> TrafficSignal` represents a stored field/reference, while
+`TrafficController ..> Violation` represents method-level usage dependency only.
+
 ## Java Code (Model-to-Code Output)
 
 ```java
