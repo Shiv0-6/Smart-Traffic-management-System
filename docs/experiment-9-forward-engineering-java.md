@@ -95,5 +95,7 @@ class TrafficController {
 }
 ```
 
+Note: Getter methods are intentionally omitted to keep the forward-engineering example concise.
+
 ## Result
 Forward engineering was demonstrated by converting UML model structure into Java classes.

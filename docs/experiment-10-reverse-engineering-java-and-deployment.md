@@ -27,6 +27,10 @@ class AlertService {
 }
 ```
 
+Note: Constructors/getters are omitted for brevity in this teaching example.
+Also, `new AlertService()` inside `analyze` is intentionally simple for demonstration;
+production code should use dependency injection or shared service instances.
+
 ## Reverse-Engineered Class Model (Code to UML)
 
 ```mermaid
