@@ -31,8 +31,9 @@ classDiagram
     TrafficController ..> Violation
 ```
 
-Note: `TrafficController --> TrafficSignal` represents a stored field/reference, while
-`TrafficController ..> Violation` represents method-level usage dependency only.
+Note: In UML, `-->` denotes association and `..>` denotes dependency.
+In this example, association maps to a held `TrafficSignal` reference, while dependency maps to
+method-level `Violation` usage.
 
 ## Java Code (Model-to-Code Output)
 

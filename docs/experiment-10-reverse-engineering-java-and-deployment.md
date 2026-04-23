@@ -13,7 +13,10 @@ class SensorNode {
 
 class TrafficProcessor {
     public void analyze(SensorNode node) {
-        // traffic analytics logic
+        AlertService alertService = new AlertService();
+        if (node != null) {
+            alertService.sendAlert("Traffic analyzed for sensor node");
+        }
     }
 }
 

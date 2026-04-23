@@ -2,6 +2,7 @@
 
 ## Theory
 Sequence diagrams model time-ordered interactions between actors and system modules.
+They show lifelines and messages in chronological order to capture runtime behavior.
 They are useful for validating message flow, decision points, and real-time behaviors.
 
 ## Scenario 1: Adaptive Traffic Signal Control During Congestion
