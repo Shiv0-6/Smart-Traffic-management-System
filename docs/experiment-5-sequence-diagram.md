@@ -2,8 +2,11 @@
 
 ## Theory
 Sequence diagrams model time-ordered interactions between actors and system modules.
-They show lifelines and messages in chronological order to capture runtime behavior.
-They are useful for validating message flow, decision points, and real-time behaviors.
+They show lifelines, activation periods, and messages in chronological order to capture runtime behavior.
+In UML, they are especially useful when the order of requests, responses, and alternate branches affects system correctness.
+
+In a smart traffic system, sequence diagrams help explain how cameras, detectors, analytics services, signal controllers, and dashboards cooperate during congestion or violation handling.
+They make it easier to verify response timing, follow control flow, and document event-driven communication between modules.
 
 ## Scenario 1: Adaptive Traffic Signal Control During Congestion
 

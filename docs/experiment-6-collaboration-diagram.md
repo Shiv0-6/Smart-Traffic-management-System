@@ -2,6 +2,11 @@
 
 ## Theory
 Collaboration diagrams show the relationships between objects and the numbered sequence of messages exchanged between them.
+They focus on object interaction, message order, and responsibility sharing rather than detailed timing.
+This makes them useful for understanding how a set of components cooperates to complete one workflow.
+
+In a traffic management system, collaboration diagrams help trace how detection, analytics, signal control, storage, and notification objects exchange messages to complete one operation.
+They are a compact way to document communication paths and identify which object is responsible for each step.
 
 ## Collaboration Diagram: Smart Traffic Management Workflow
 

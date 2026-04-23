@@ -2,6 +2,11 @@
 
 ## Theory
 Forward engineering transforms UML models (classes, relationships, behavior) into source code.
+It starts from a design model and produces implementation artifacts such as classes, methods, and interfaces.
+This approach helps keep the code aligned with the intended architecture and reduces ambiguity during development.
+
+In software engineering labs, forward engineering is commonly used to demonstrate how class diagrams can be converted into Java code with attributes, constructors, and operations.
+It is especially useful when the objective is to preserve the structure of the model while moving from design to implementation.
 
 ## UML Class View Used for Conversion
 

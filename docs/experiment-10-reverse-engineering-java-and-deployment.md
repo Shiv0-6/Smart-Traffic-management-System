@@ -2,6 +2,11 @@
 
 ## Theory
 Reverse engineering derives UML models from existing source code to understand structure, dependencies, and runtime deployment.
+It is commonly used when code already exists and the goal is to rebuild design documentation or analyze system behavior.
+This process helps teams understand legacy systems, verify architecture, and communicate implementation details more clearly.
+
+In a traffic management project, reverse engineering can reveal how sensors, processors, and alert services are connected in code, while a deployment diagram shows where those parts run at runtime.
+Together, these views connect static code structure with the physical or logical environment in which the application operates.
 
 ## Java Code Sample (Input for Reverse Engineering)
 
