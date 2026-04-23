@@ -30,5 +30,7 @@ flowchart TB
     SOCKET --> UI
 ```
 
+Note: This is a simplified component representation using Mermaid flowchart syntax to show module dependencies.
+
 ## Result
 A component diagram was prepared showing major modules and integration points of the system.

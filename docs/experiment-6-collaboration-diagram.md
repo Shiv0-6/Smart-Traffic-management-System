@@ -1,7 +1,7 @@
 # Experiment 6 - Collaboration Diagram (SE Lab)
 
 ## Theory
-Collaboration (communication) diagrams focus on structural organization of objects and numbered message exchange among them.
+Collaboration diagrams show the relationships between objects and the numbered sequence of messages exchanged between them.
 
 ## Collaboration Diagram: Smart Traffic Management Workflow
 
@@ -16,6 +16,8 @@ flowchart LR
     E -->|1.7 sendAlert()| H[8: Notification Service]
     C -->|1.8 publishMetrics()| I[9: Admin Dashboard]
 ```
+
+Note: Mermaid flowchart notation is used here as a simplified UML communication/collaboration view with numbered messages.
 
 ## Result
 A collaboration diagram was created to show object interaction and message sequencing for the traffic workflow.

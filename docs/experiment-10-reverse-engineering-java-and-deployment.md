@@ -75,5 +75,7 @@ flowchart LR
     APP --> DASH
 ```
 
+Note: This is a simplified deployment architecture view using Mermaid flowchart notation.
+
 ## Result
 Reverse engineering was performed from Java code to UML class model, and a deployment diagram was created for runtime architecture.
