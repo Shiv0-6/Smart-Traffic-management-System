@@ -7,18 +7,18 @@ Reverse engineering derives UML models from existing source code to understand s
 
 ```java
 class SensorNode {
-    String sensorId;
-    String location;
+    private String sensorId;
+    private String location;
 }
 
 class TrafficProcessor {
-    void analyze(SensorNode node) {
+    public void analyze(SensorNode node) {
         // traffic analytics logic
     }
 }
 
 class AlertService {
-    void sendAlert(String message) {
+    public void sendAlert(String message) {
         // notification logic
     }
 }
