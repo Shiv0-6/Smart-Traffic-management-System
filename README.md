@@ -11,62 +11,6 @@ An AI-driven intelligent traffic management system with real-time vehicle detect
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6)
 ![Supabase](https://img.shields.io/badge/Supabase-Latest-3ecf8e)
 
-## ✨ Key Features
-
-### 🎨 Modern UI/UX
-- **Dark Mode Toggle**: Switch between Light, Dark, and System themes with persistent preferences
-- **Professional Design**: Monitoring system aesthetic with deep blue and cyan accents
-- **Gradient Effects**: Smooth color transitions and glass morphism
-- **Animated Components**: Pulsing traffic lights, floating elements, smooth transitions
-- **Responsive Design**: Seamless experience from mobile to desktop
-- **Real-time Updates**: Live data refresh with visual indicators
-
-### 🗺️ Interactive Mapping
-- **Custom SVG Map**: Interactive traffic visualization with signal markers
-- **Google Maps Integration**: Real-time traffic layer with live conditions
-- **Clickable Markers**: Detailed information on signal status and timing
-- **Congestion Overlay**: Color-coded traffic density visualization
-- **Route Planning**: AI-optimized route suggestions
-
-### 📊 Advanced Analytics
-- **Traffic Intelligence**: Route optimization and travel time predictions
-- **Congestion Forecasting**: AI-powered future traffic pattern analysis
-- **Performance Metrics**: System efficiency and response time tracking
-- **Incident Tracking**: Real-time alerts for accidents and roadwork
-- **Historical Analysis**: Trend identification and peak hour detection
-
-### 🚦 Traffic Signal Control
-- **AI Auto Mode**: Adaptive signal timing based on real-time traffic
-- **Manual Override**: Operator control for special situations
-- **Live Status**: Real-time signal state monitoring (Red/Yellow/Green)
-- **Timing Configuration**: Customizable phase durations
-- **Bulk Operations**: Control multiple signals simultaneously
-
-### 🚗 Vehicle Detection
-- **Multi-type Recognition**: Cars, buses, motorcycles, trucks
-- **Real-time Counting**: Live vehicle statistics per intersection
-- **Historical Data**: Trend analysis and pattern identification
-- **Export Reports**: Download detection data
-
-### ⚠️ Violation Management
-- **Automated Detection**: AI-powered violation identification
-- **Multiple Types**: Red light running, illegal turns, speeding
-- **Video Snapshots**: Visual evidence capture
-- **Workflow System**: Pending → Reviewed → Resolved
-- **Filtering & Search**: Advanced violation management
-
-### 🔐 Authentication & Access Control
-- **Public Access**: Anyone can view traffic data without logging in
-- **Admin Login**: Secure authentication for system administrators
-- **Role-based Permissions**: Admin, Operator, and User roles
-- **Visual Indicators**: Shield icon for admins, Eye icon for viewers
-- **First User Admin**: First registered user automatically becomes administrator
-- **Session Management**: Secure token-based authentication
-
-### 👥 User Roles
-- **Public Users**: View all traffic data, signals, violations, and analytics (no login required)
-- **Administrator**: Full system control, user management, and all editing capabilities
-- **Operator**: Traffic control and violation review (same as admin for traffic operations)
 
 ## 🔑 Getting Started with Admin Access
 
@@ -215,22 +159,8 @@ For issues, check:
 ---
 
 
-Start with `pnpm run dev` and access http://localhost:5174
+Start with `pnpm run dev`
 
-
-## 📖 Documentation
-
-### User Guides
-- **[USER_GUIDE.md](./USER_GUIDE.md)** - Complete user guide for public users and admins
-- **[ADMIN_GUIDE.md](./ADMIN_GUIDE.md)** - Comprehensive admin login and control guide
-- **[DARK_MODE_GUIDE.md](./DARK_MODE_GUIDE.md)** - Dark mode and theme switching guide
-- **[QUICK_START.md](./QUICK_START.md)** - Step-by-step getting started guide
-
-### Technical Documentation
-- **[FEATURES.md](./FEATURES.md)** - Comprehensive feature documentation
-- **[GOOGLE_MAPS_SETUP.md](./GOOGLE_MAPS_SETUP.md)** - Google Maps integration guide
-- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Recent implementation details
-- **[TODO.md](./TODO.md)** - Development progress and roadmap
 
 ## 🏗️ Project Structure
 
