@@ -11,6 +11,7 @@ import type { TrafficSignal, Violation, TrafficFlow } from '@/types/types';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useSocket } from '@/hooks/useSocket';
+import type { TrafficUpdate } from '@/utils/socketClient';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +27,37 @@ const Dashboard: React.FC = () => {
     avgSpeed: 0,
   });
 
+  const isTrafficFlow = (data: TrafficUpdate['data']): data is TrafficFlow => {
+    return 'vehicle_count' in data && 'avg_speed' in data && 'congestion_level' in data;
+  };
+
+  const isTrafficSignal = (data: TrafficUpdate['data']): data is TrafficSignal => {
+    return 'status' in data && 'mode' in data && 'last_updated' in data;
+  };
+
+  const applyTrafficUpdate = (update: TrafficUpdate) => {
+    if (update.type === 'flow_update' && isTrafficFlow(update.data)) {
+      setFlowData((prev) => [update.data, ...prev.filter((flow) => flow.id !== update.data.id)].slice(0, 10));
+      setStats((prev) => ({
+        ...prev,
+        totalVehicles: prev.totalVehicles + (update.data.vehicle_count || 0),
+        avgSpeed: update.data.avg_speed ? Math.round(update.data.avg_speed) : prev.avgSpeed,
+      }));
+    }
+
+    if (update.type === 'signal_change' && isTrafficSignal(update.data)) {
+      setSignals((prev) => {
+        const exists = prev.some((signal) => signal.id === update.data.id);
+
+        if (!exists) {
+          return [update.data, ...prev];
+        }
+
+        return prev.map((signal) => (signal.id === update.data.id ? update.data : signal));
+      });
+    }
+  };
+
   useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 30000);
@@ -35,18 +67,34 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (trafficUpdates.length > 0) {
       const latestUpdate = trafficUpdates[trafficUpdates.length - 1];
-      console.log('Traffic update received:', latestUpdate);
-      loadData();
+      applyTrafficUpdate(latestUpdate);
     }
   }, [trafficUpdates]);
 
   useEffect(() => {
     if (violationAlerts.length > 0) {
       const latestAlert = violationAlerts[violationAlerts.length - 1];
+      const liveViolation: Violation = {
+        id: latestAlert.id,
+        location: latestAlert.location,
+        violation_type: latestAlert.type,
+        timestamp: new Date(latestAlert.timestamp).toISOString(),
+        snapshot_url: null,
+        vehicle_plate: latestAlert.vehicleId,
+        status: 'pending',
+        reviewed_by: null,
+        notes: `Realtime alert severity: ${latestAlert.severity}`,
+        created_at: new Date().toISOString(),
+      };
+
+      setViolations((prev) => [liveViolation, ...prev.filter((violation) => violation.id !== liveViolation.id)].slice(0, 50));
+      setStats((prev) => ({
+        ...prev,
+        pendingViolations: prev.pendingViolations + 1,
+      }));
       toast.error(`New violation detected: ${latestAlert.type}`, {
         description: latestAlert.location,
       });
-      loadData();
     }
   }, [violationAlerts]);
 
@@ -94,8 +142,6 @@ const Dashboard: React.FC = () => {
         return 'bg-muted';
     }
   };
-
-  //
 
   if (loading) {
     return (
