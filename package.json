@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:realtime": "node scripts/realtime-server.mjs",
     "build": "vite build",
-    "lint": "tsgo -p tsconfig.check.json; npx biome lint; .rules/check.sh;npx tailwindcss -i ./src/index.css -o /dev/null 2>&1 | grep -E '^(CssSyntaxError|Error):.*' || true;vite build --minify false --logLevel error --outDir /tmp/outdir"
+    "lint": "tsgo -p tsconfig.check.json && npx biome lint && bash .rules/check.sh && npx tailwindcss -i ./src/index.css -o /dev/null 2>&1 | grep -E '^(CssSyntaxError|Error):.*' || true && vite build --minify false --logLevel error --outDir /tmp/outdir"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -68,6 +69,7 @@
     "recharts": "^2.15.3",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.7.2",
+    "socket.io": "^4.8.3",
     "sonner": "^2.0.7",
     "streamdown": "^1.4.0",
     "tailwind-merge": "^3.3.1",
