@@ -20,15 +20,12 @@ An AI-driven intelligent traffic management system with real-time vehicle detect
    - Open the application in your browser
    - Browse as a public user (no login required)
 
-2. **Create Admin Account**
+2. **Use Demo Admin Account**
    - Click **"Admin Login"** button in the top-right corner
-   - Click **"Create Account"**
-   - Enter a username (letters, numbers, underscores only)
-   - Enter a password (minimum 6 characters)
-   - Click **"Create Account"**
+   - Use the default credentials shown on the login screen
+   - Defaults are `admin` / `admin123` unless changed in `.env`
 
-3. **Automatic Admin Privileges**
-   - First registered user becomes administrator automatically
+3. **Admin Privileges**
    - You'll see a **Shield icon** badge indicating admin status
    - All edit controls are now enabled
 
@@ -66,9 +63,19 @@ pnpm run dev
 # or: npm run dev
 ```
 
-Then open **http://localhost:5174** (or shown port in terminal).
+Then open **http://localhost:5173** (or the port shown in terminal).
 
-### 4️⃣ View the App
+### 4️⃣ Run Realtime Traffic Simulator
+
+In a second terminal, run:
+
+```bash
+pnpm run dev:realtime
+```
+
+This starts a local Socket.io server on **http://localhost:3001**. The dashboard will receive live traffic flow, signal change, and violation alert events through `VITE_SOCKET_URL`.
+
+### 5️⃣ View the App
 
 - 📊 **Dashboard**: Real-time traffic overview with maps and alerts
 - 🚗 **Vehicle Detection**: Count and classify vehicles by type
@@ -97,8 +104,9 @@ pnpm run build
 
 ```bash
 pnpm run dev       # Start dev server
+pnpm run dev:realtime # Start local realtime Socket.io simulator
 pnpm run build     # Production build
-pnpm run lint      # Run linter (Biome)
+pnpm run lint      # Type check, lint, project rules, CSS check, build smoke test
 pnpm run preview   # Test production build locally
 ```
 
@@ -131,8 +139,19 @@ pnpm install
 VITE_MOCK_MODE=1
 ```
 
-### Port 5174 already in use
-Vite will auto-select next available port (5175, 5176, etc.)
+### Port 5173 already in use
+Vite will auto-select the next available port (5174, 5175, etc.)
+
+### Realtime status says disconnected
+```bash
+pnpm run dev:realtime
+```
+
+Also check that `.env` contains:
+
+```env
+VITE_SOCKET_URL=http://localhost:3001
+```
 
 ### Google Maps not loading
 - Check `VITE_GOOGLE_MAPS_API_KEY` in `.env`

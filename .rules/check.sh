@@ -1,15 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-ast-grep scan -r .rules/SelectItem.yml
+npx ast-grep scan -r .rules/SelectItem.yml
 
-useauth_output=$(ast-grep scan -r .rules/useAuth.yml 2>/dev/null)
+useauth_output=$(npx ast-grep scan -r .rules/useAuth.yml 2>/dev/null || true)
 
 if [ -z "$useauth_output" ]; then
     exit 0
 fi
 
-authprovider_output=$(ast-grep scan -r .rules/authProvider.yml 2>/dev/null)
+authprovider_output=$(npx ast-grep scan -r .rules/authProvider.yml 2>/dev/null || true)
 
 if [ -n "$authprovider_output" ]; then
     exit 0

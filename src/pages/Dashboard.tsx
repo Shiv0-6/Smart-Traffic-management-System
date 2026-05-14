@@ -37,23 +37,27 @@ const Dashboard: React.FC = () => {
 
   const applyTrafficUpdate = (update: TrafficUpdate) => {
     if (update.type === 'flow_update' && isTrafficFlow(update.data)) {
-      setFlowData((prev) => [update.data, ...prev.filter((flow) => flow.id !== update.data.id)].slice(0, 10));
+      const flowUpdate = update.data;
+
+      setFlowData((prev) => [flowUpdate, ...prev.filter((flow) => flow.id !== flowUpdate.id)].slice(0, 10));
       setStats((prev) => ({
         ...prev,
-        totalVehicles: prev.totalVehicles + (update.data.vehicle_count || 0),
-        avgSpeed: update.data.avg_speed ? Math.round(update.data.avg_speed) : prev.avgSpeed,
+        totalVehicles: prev.totalVehicles + (flowUpdate.vehicle_count || 0),
+        avgSpeed: flowUpdate.avg_speed ? Math.round(flowUpdate.avg_speed) : prev.avgSpeed,
       }));
     }
 
     if (update.type === 'signal_change' && isTrafficSignal(update.data)) {
+      const signalUpdate = update.data;
+
       setSignals((prev) => {
-        const exists = prev.some((signal) => signal.id === update.data.id);
+        const exists = prev.some((signal) => signal.id === signalUpdate.id);
 
         if (!exists) {
-          return [update.data, ...prev];
+          return [signalUpdate, ...prev];
         }
 
-        return prev.map((signal) => (signal.id === update.data.id ? update.data : signal));
+        return prev.map((signal) => (signal.id === signalUpdate.id ? signalUpdate : signal));
       });
     }
   };
