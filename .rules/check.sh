@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 ast-grep scan -r .rules/SelectItem.yml
 
