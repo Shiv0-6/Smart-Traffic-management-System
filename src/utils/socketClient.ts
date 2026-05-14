@@ -4,10 +4,13 @@
  */
 
 import { io, Socket } from 'socket.io-client';
+import type { TrafficFlow, TrafficSignal } from '@/types/types';
+
+export type TrafficUpdateData = TrafficFlow | TrafficSignal | Record<string, unknown>;
 
 export interface TrafficUpdate {
   type: 'vehicle_detection' | 'signal_change' | 'flow_update';
-  data: any;
+  data: TrafficUpdateData;
   timestamp: number;
 }
 
@@ -31,15 +34,23 @@ class SocketClient {
   private connectionStatusCallbacks: Set<ConnectionStatusCallback> = new Set();
   private reconnectAttempts: number = 0;
   private maxReconnectAttempts: number = 5;
+  private connectionUrl: string | null = null;
 
   /**
    * Initialize socket connection
    */
-  connect(url: string = 'http://localhost:3001'): void {
+  connect(url: string = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001'): void {
     if (this.socket?.connected) {
-      console.log('Socket already connected');
+      this.notifyConnectionStatus(true);
       return;
     }
+
+    if (this.socket && this.connectionUrl === url) {
+      return;
+    }
+
+    this.disconnect();
+    this.connectionUrl = url;
 
     this.socket = io(url, {
       transports: ['websocket', 'polling'],
@@ -50,22 +61,17 @@ class SocketClient {
     });
 
     this.socket.on('connect', () => {
-      console.log('Socket connected:', this.socket?.id);
       this.reconnectAttempts = 0;
       this.notifyConnectionStatus(true);
     });
 
-    this.socket.on('disconnect', (reason) => {
-      console.log('Socket disconnected:', reason);
+    this.socket.on('disconnect', () => {
       this.notifyConnectionStatus(false);
     });
 
-    this.socket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error);
+    this.socket.on('connect_error', () => {
       this.reconnectAttempts++;
-      if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.error('Max reconnection attempts reached');
-      }
+      this.notifyConnectionStatus(false);
     });
 
     this.socket.on('traffic_update', (update: TrafficUpdate) => {
@@ -84,6 +90,8 @@ class SocketClient {
     if (this.socket) {
       this.socket.disconnect();
       this.socket = null;
+      this.connectionUrl = null;
+      this.notifyConnectionStatus(false);
     }
   }
 
@@ -120,11 +128,9 @@ class SocketClient {
   /**
    * Emit a custom event
    */
-  emit(event: string, data: any): void {
+  emit(event: string, data: unknown): void {
     if (this.socket?.connected) {
       this.socket.emit(event, data);
-    } else {
-      console.warn('Socket not connected, cannot emit event:', event);
     }
   }
 
