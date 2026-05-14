@@ -62,7 +62,7 @@ const AdvancedTraffic: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="page-shell space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold gradient-text">Advanced Traffic Intelligence</h1>

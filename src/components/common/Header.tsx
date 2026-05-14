@@ -1,6 +1,19 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Activity, LogOut, LogIn, Menu, Shield } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  Car,
+  Gauge,
+  LogIn,
+  LogOut,
+  Menu,
+  Route,
+  Settings,
+  Shield,
+  SlidersHorizontal,
+} from "lucide-react";
 import routes from "../../routes";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -27,37 +40,58 @@ const Header: React.FC = () => {
   });
 
   const isAdmin = profile?.role === 'admin' || profile?.role === 'operator';
+  const navIcons = {
+    '/': Gauge,
+    '/detection': Car,
+    '/simulation': Route,
+    '/advanced': BarChart3,
+    '/signals': SlidersHorizontal,
+    '/violations': AlertTriangle,
+    '/analysis': BarChart3,
+    '/settings': Settings,
+  };
 
   const NavLinks = () => (
     <>
-      {filteredNavigation.map((item) => (
-        <Link
-          key={item.path}
-          to={item.path}
-          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-            location.pathname === item.path
-              ? "bg-primary text-primary-foreground"
-              : "text-foreground hover:bg-accent hover:text-accent-foreground"
-          }`}
-        >
-          {item.name}
-        </Link>
-      ))}
+      {filteredNavigation.map((item) => {
+        const Icon = navIcons[item.path as keyof typeof navIcons] || Activity;
+        const isActive = location.pathname === item.path;
+
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`group flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              isActive
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+            }`}
+          >
+            <Icon className={`h-4 w-4 ${isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"}`} />
+            <span>{item.name}</span>
+          </Link>
+        );
+      })}
     </>
   );
 
   return (
-    <header className="border-b bg-card sticky top-0 z-50 shadow-lg">
-      <nav className="container mx-auto px-4">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/88 shadow-sm backdrop-blur-xl">
+      <nav className="container mx-auto max-w-[1500px] px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-primary rounded-lg shadow-md">
+              <div className="rounded-lg bg-primary p-2 shadow-sm">
                 <Activity className="h-5 w-5 text-white" />
               </div>
-              <span className="text-lg font-bold gradient-text">
-                Smart Traffic
-              </span>
+              <div className="leading-tight">
+                <span className="block text-base font-semibold tracking-tight">
+                  Smart Traffic
+                </span>
+                <span className="hidden text-xs text-muted-foreground sm:block">
+                  Control Center
+                </span>
+              </div>
             </Link>
 
             <div className="hidden xl:flex items-center gap-2">
@@ -71,14 +105,14 @@ const Header: React.FC = () => {
               <div className="hidden xl:flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-8 w-8 ring-2 ring-primary/20">
-                    <AvatarFallback className="bg-gradient-primary text-white text-xs font-semibold">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
                       {profile.username?.[0]?.toUpperCase() || 'U'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">{profile.username}</span>
                     {isAdmin ? (
-                      <Badge className="text-xs w-fit bg-gradient-accent text-white border-0">
+                      <Badge className="text-xs w-fit bg-accent text-accent-foreground border-0">
                         <Shield className="h-3 w-3 mr-1" />
                         Admin
                       </Badge>
@@ -102,7 +136,7 @@ const Header: React.FC = () => {
             ) : (
               <Button
                 onClick={() => navigate('/login')}
-                className="hidden xl:flex bg-gradient-primary hover:opacity-90 transition-opacity"
+                className="hidden xl:flex"
               >
                 <LogIn className="h-4 w-4 mr-2" />
                 Admin Login
@@ -120,14 +154,14 @@ const Header: React.FC = () => {
                   {user && profile ? (
                     <div className="flex items-center gap-3 pb-4 border-b">
                       <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-                        <AvatarFallback className="bg-gradient-primary text-white font-semibold">
+                        <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
                           {profile.username?.[0]?.toUpperCase() || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
                         <span className="font-medium">{profile.username}</span>
                         {isAdmin ? (
-                          <Badge className="text-xs w-fit bg-gradient-accent text-white border-0">
+                          <Badge className="text-xs w-fit bg-accent text-accent-foreground border-0">
                             <Shield className="h-3 w-3 mr-1" />
                             Admin
                           </Badge>
@@ -141,7 +175,7 @@ const Header: React.FC = () => {
                   ) : (
                     <Button
                       onClick={() => navigate('/login')}
-                      className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
+                      className="w-full"
                     >
                       <LogIn className="h-4 w-4 mr-2" />
                       Admin Login

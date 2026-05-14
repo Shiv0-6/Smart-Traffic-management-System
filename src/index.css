@@ -10,26 +10,26 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --radius: 0.5rem;
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 33% 98%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 217 91% 45%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 214 84% 39%;
     --primary-foreground: 210 40% 98%;
-    --primary-glow: 217 91% 55%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 189 94% 38%;
+    --primary-glow: 200 95% 44%;
+    --secondary: 210 24% 93%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 24% 93%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 188 82% 35%;
     --accent-foreground: 210 40% 98%;
-    --accent-glow: 189 94% 48%;
+    --accent-glow: 170 76% 40%;
     --destructive: 0 84.2% 60.2%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 217 91% 45%;
+    --border: 214 24% 88%;
+    --input: 214 24% 88%;
+    --ring: 214 84% 39%;
     --success: 142 76% 36%;
     --success-glow: 142 76% 46%;
     --warning: 38 92% 50%;
@@ -51,26 +51,26 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 222 42% 9%;
     --foreground: 210 40% 98%;
-    --card: 222 47% 14%;
+    --card: 222 36% 13%;
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 15%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
+    --primary: 206 92% 62%;
     --primary-foreground: 222 47% 11%;
-    --primary-glow: 217 91% 70%;
-    --secondary: 217 19% 27%;
+    --primary-glow: 184 82% 54%;
+    --secondary: 217 22% 20%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217 19% 27%;
     --muted-foreground: 215 20% 65%;
-    --accent: 189 94% 43%;
+    --accent: 166 77% 45%;
     --accent-foreground: 210 40% 98%;
     --accent-glow: 189 94% 53%;
     --destructive: 0 62% 30%; 
-    --border: 217 19% 27%;
-    --input: 217 19% 27%;
-    --ring: 217 91% 60%;
+    --border: 217 20% 23%;
+    --input: 217 20% 23%;
+    --ring: 206 92% 62%;
     --success: 142 76% 36%;
     --success-glow: 142 76% 46%;
     --warning: 38 92% 50%;
@@ -100,6 +100,23 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    min-width: 320px;
+  }
+
+  body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background:
+      linear-gradient(180deg, hsl(var(--primary) / 0.08), transparent 18rem),
+      radial-gradient(circle at 100% 0%, hsl(var(--accent) / 0.1), transparent 28rem);
+  }
+
+  ::selection {
+    color: hsl(var(--primary-foreground));
+    background: hsl(var(--primary));
   }
 }
 
@@ -125,13 +142,33 @@ All colors MUST be HSL.
   }
 
   .glass-card {
-    @apply bg-card/50 backdrop-blur-md border-border/50;
+    @apply bg-card/85 backdrop-blur-xl border-border/70 shadow-sm;
   }
 
   .dark .glass-card {
-    background: rgba(30, 58, 138, 0.1);
+    background: hsl(var(--card) / 0.78);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid hsl(var(--border) / 0.75);
+  }
+
+  .page-shell {
+    @apply container mx-auto w-full max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8 lg:py-7;
+  }
+
+  .page-header {
+    @apply flex flex-col gap-4 rounded-lg border bg-card/80 p-5 shadow-sm backdrop-blur md:flex-row md:items-center md:justify-between;
+  }
+
+  .page-title {
+    @apply text-2xl font-semibold tracking-tight text-foreground sm:text-3xl;
+  }
+
+  .surface-card {
+    @apply border-border/70 bg-card/90 shadow-sm transition-colors;
+  }
+
+  .interactive-row {
+    @apply rounded-lg border border-border/70 bg-background/45 transition-colors hover:border-primary/40 hover:bg-primary/5;
   }
 
   .glow-primary {

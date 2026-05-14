@@ -155,7 +155,7 @@ const SignalControl: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="page-shell space-y-6">
       <div className="flex @container flex-col gap-4">
         <div className="flex @md:flex-row flex-col @md:items-center justify-between gap-4">
           <div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Car, Activity, AlertTriangle, Gauge, TrendingUp, Clock, Zap, Map as MapIcon, Wifi } from 'lucide-react';
+import { Car, Activity, AlertTriangle, Gauge, TrendingUp, Clock, Zap, Map as MapIcon, Wifi, RefreshCw, ArrowRight, ShieldCheck } from 'lucide-react';
 import { StatCard } from '@/components/common/StatCard';
 import { GoogleTrafficMap } from '@/components/common/GoogleTrafficMap';
 import LeafletTrafficMap from '@/components/maps/LeafletTrafficMap';
@@ -109,21 +109,21 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="page-shell space-y-6">
+      <div className="page-header">
         <div>
-          <h1 className="text-4xl font-bold gradient-text">Traffic Management Dashboard</h1>
+          <h1 className="page-title">Traffic Management Dashboard</h1>
           <p className="text-muted-foreground mt-2 flex items-center gap-2">
             <Clock className="h-4 w-4" />
             Real-time overview of traffic system status
           </p>
         </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-lg shadow-sm">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-2 rounded-md border border-success/30 bg-success/10 px-3 py-2">
+            <ShieldCheck className="h-4 w-4 text-success" />
             <span className="text-sm font-medium">System Online</span>
           </div>
-          <div className={`flex items-center gap-2 px-4 py-2 border rounded-lg shadow-sm ${
+          <div className={`flex items-center gap-2 rounded-md border px-3 py-2 ${
             isConnected 
               ? 'bg-green-500/10 border-green-500/30' 
               : 'bg-red-500/10 border-red-500/30'
@@ -133,12 +133,15 @@ const Dashboard: React.FC = () => {
               Socket.io {isConnected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
+          <Button variant="outline" onClick={loadData} className="sm:ml-2">
+            <RefreshCw className="h-4 w-4" />
+            Refresh
+          </Button>
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-4 grid-cols-1 @container">
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 gradient-primary opacity-10"></div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div>
           <StatCard
             title="Total Vehicles"
             value={stats.totalVehicles}
@@ -147,8 +150,7 @@ const Dashboard: React.FC = () => {
             trend={{ value: 12, isPositive: true }}
           />
         </div>
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 gradient-accent opacity-10"></div>
+        <div>
           <StatCard
             title="Active Signals"
             value={stats.activeSignals}
@@ -156,8 +158,7 @@ const Dashboard: React.FC = () => {
             description="Traffic lights operational"
           />
         </div>
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-destructive/10"></div>
+        <div>
           <StatCard
             title="Pending Violations"
             value={stats.pendingViolations}
@@ -165,8 +166,7 @@ const Dashboard: React.FC = () => {
             description="Awaiting review"
           />
         </div>
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 gradient-success opacity-10"></div>
+        <div>
           <StatCard
             title="Avg Speed"
             value={`${stats.avgSpeed} km/h`}
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
-        <Card className="border-primary/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
+        <Card className="surface-card">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -188,24 +188,24 @@ const Dashboard: React.FC = () => {
                 </CardTitle>
                 <CardDescription>Interactive real-time traffic visualization with Google Maps</CardDescription>
               </div>
-              <Badge variant="outline" className="animate-pulse border-primary text-primary shadow-sm">
+              <Badge variant="outline" className="border-primary text-primary">
                 LIVE
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="rounded-lg overflow-hidden border border-primary/30 shadow-md" style={{ height: '500px' }}>
+              <div className="overflow-hidden rounded-lg border border-border" style={{ height: '500px' }}>
                 <GoogleTrafficMap signals={signals} />
               </div>
               <div className="text-xs text-muted-foreground text-center">
-                🗺️ Google Maps with traffic layer and signal markers
+                Google Maps with traffic layer and signal markers
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-accent/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
+        <Card className="surface-card">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -222,11 +222,11 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="rounded-lg overflow-hidden border border-accent/30 shadow-md" style={{ height: '500px' }}>
+              <div className="overflow-hidden rounded-lg border border-border" style={{ height: '500px' }}>
                 <GoogleTrafficMap signals={signals} trafficLayer={false} mapStyles={null} />
               </div>
               <div className="text-xs text-muted-foreground text-center">
-                🗺️ Clean Google Map view without traffic layer
+                Clean Google Map view without traffic layer
               </div>
             </div>
           </CardContent>
@@ -234,7 +234,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-3 grid-cols-1">
-        <Card className="xl:col-span-2 border-primary/30 shadow-lg glass-card hover:shadow-xl transition-shadow">
+        <Card className="surface-card xl:col-span-2">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
@@ -250,17 +250,17 @@ const Dashboard: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg overflow-hidden border border-primary/30 shadow-md">
+            <div className="overflow-hidden rounded-lg border border-border">
               <LeafletTrafficMap signals={signals} />
             </div>
             <div className="text-xs text-muted-foreground text-center mt-3">
-              🗺️ Powered by OpenStreetMap & Leaflet.js
+              Powered by OpenStreetMap and Leaflet.js
             </div>
           </CardContent>
         </Card>
 
         <div className="space-y-6 col-span-1">
-          <Card className="border-accent/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
+          <Card className="surface-card">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Zap className="h-5 w-5 text-accent" />
@@ -271,40 +271,44 @@ const Dashboard: React.FC = () => {
             <CardContent className="space-y-2">
               <Button 
                 variant="outline" 
-                className="w-full justify-start hover:bg-primary/10 hover:border-primary transition-all"
+                className="w-full justify-between"
                 onClick={() => navigate('/detection')}
               >
                 <Car className="h-4 w-4 mr-2" />
-                Vehicle Detection
+                <span className="mr-auto">Vehicle Detection</span>
+                <ArrowRight className="h-4 w-4" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-start hover:bg-accent/10 hover:border-accent transition-all"
+                className="w-full justify-between"
                 onClick={() => navigate('/signals')}
               >
                 <Activity className="h-4 w-4 mr-2" />
-                Signal Control
+                <span className="mr-auto">Signal Control</span>
+                <ArrowRight className="h-4 w-4" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-start hover:bg-destructive/10 hover:border-destructive transition-all"
+                className="w-full justify-between"
                 onClick={() => navigate('/violations')}
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
-                View Violations
+                <span className="mr-auto">View Violations</span>
+                <ArrowRight className="h-4 w-4" />
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-start hover:bg-success/10 hover:border-success transition-all"
+                className="w-full justify-between"
                 onClick={() => navigate('/analysis')}
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
-                Data Analysis
+                <span className="mr-auto">Data Analysis</span>
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-warning/20 shadow-lg glass-card hover:shadow-xl transition-shadow">
+          <Card className="surface-card">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-warning" />
@@ -314,7 +318,7 @@ const Dashboard: React.FC = () => {
             <CardContent className="space-y-3">
               {violations.length > 0 ? (
                 <>
-                  <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg hover:bg-destructive/20 transition-colors cursor-pointer" onClick={() => navigate('/violations')}>
+                  <div className="interactive-row cursor-pointer p-3" onClick={() => navigate('/violations')}>
                     <p className="text-sm font-medium flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-destructive animate-pulse"></span>
                       {violations.length} Pending Violations
@@ -322,7 +326,7 @@ const Dashboard: React.FC = () => {
                     <p className="text-xs text-muted-foreground mt-1">Requires immediate attention</p>
                   </div>
                   {flowData.some(f => f.congestion_level === 'high') && (
-                    <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg hover:bg-warning/20 transition-colors cursor-pointer" onClick={() => navigate('/simulation')}>
+                    <div className="interactive-row cursor-pointer p-3" onClick={() => navigate('/simulation')}>
                       <p className="text-sm font-medium flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-warning animate-pulse"></span>
                         High Congestion Detected
@@ -334,7 +338,7 @@ const Dashboard: React.FC = () => {
                   )}
                 </>
               ) : (
-                <div className="p-3 bg-success/10 border border-success/20 rounded-lg">
+                <div className="rounded-lg border border-success/20 bg-success/10 p-3">
                   <p className="text-sm font-medium">All Systems Normal</p>
                   <p className="text-xs text-muted-foreground mt-1">No alerts at this time</p>
                 </div>
@@ -345,7 +349,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
-        <Card className="border-primary/20 shadow-lg">
+        <Card className="surface-card">
           <CardHeader>
             <CardTitle>Traffic Signals Status</CardTitle>
             <CardDescription>Current status of all traffic lights</CardDescription>
@@ -353,7 +357,7 @@ const Dashboard: React.FC = () => {
           <CardContent>
             <div className="space-y-3">
               {signals.slice(0, 4).map((signal) => (
-                <div key={signal.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:border-primary/50 transition-all duration-300 hover:shadow-md">
+                <div key={signal.id} className="interactive-row flex items-center justify-between p-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-4 h-4 rounded-full ${getStatusColor(signal.status)} animate-pulse`} />
                     <div>
@@ -373,7 +377,7 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-accent/20 shadow-lg">
+        <Card className="surface-card">
           <CardHeader>
             <CardTitle>Recent Violations</CardTitle>
             <CardDescription>Latest traffic violations detected</CardDescription>
@@ -390,7 +394,7 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : (
                 violations.slice(0, 4).map((violation) => (
-                  <div key={violation.id} className="flex items-center justify-between p-4 border border-border/50 rounded-lg hover:border-destructive/50 transition-all duration-300 hover:shadow-md">
+                  <div key={violation.id} className="interactive-row flex items-center justify-between p-4">
                     <div>
                       <p className="font-medium text-sm">{violation.location}</p>
                       <p className="text-xs text-muted-foreground capitalize mt-1">

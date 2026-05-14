@@ -12,9 +12,9 @@ const App: React.FC = () => {
       <ThemeProvider defaultTheme="dark" storageKey="traffic-ui-theme">
         <AuthProvider>
           <Toaster />
-          <div className="flex flex-col min-h-screen">
+          <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-grow bg-background">
+            <main className="flex-grow">
               <Routes>
                 {routes.map((route, index) => (
                   <Route

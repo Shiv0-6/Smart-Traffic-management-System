@@ -72,7 +72,7 @@ const TrafficSimulation: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="page-shell space-y-6">
       <HeroBanner
         imageSrc="/images/sumo-demo.svg"
         badges={[{ label: 'Simulation', tone: 'primary' }, { label: 'SUMO', tone: 'accent' }]}
