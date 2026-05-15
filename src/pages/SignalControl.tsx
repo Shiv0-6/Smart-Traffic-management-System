@@ -231,9 +231,9 @@ const SignalControl: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+            <div className="mt-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
               <div className="flex items-start gap-2">
-                <Activity className="h-4 w-4 text-blue-500 mt-0.5" />
+                <Activity className="h-4 w-4 text-primary mt-0.5" />
                 <div className="text-sm">
                   <strong>Formula:</strong> Cycle_Length = (1.5 × Loss_Time + 5) / (1 - Sum_of_Flow_Ratios)
                 </div>

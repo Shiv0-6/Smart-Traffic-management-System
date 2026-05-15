@@ -221,18 +221,18 @@ const ViolationManagement: React.FC = () => {
             </div>
 
             <div className="mt-4 grid gap-3 xl:grid-cols-2 grid-cols-1">
-              <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
                 <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-blue-500 mt-0.5" />
+                  <MapPin className="h-4 w-4 text-primary mt-0.5" />
                   <div className="text-sm">
                     <strong>Red Light Detection:</strong> Geofence around stop line. Triggers when signal is RED and vehicle crosses boundary.
                   </div>
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
                 <div className="flex items-start gap-2">
-                  <Navigation2 className="h-4 w-4 text-blue-500 mt-0.5" />
+                  <Navigation2 className="h-4 w-4 text-primary mt-0.5" />
                   <div className="text-sm">
                     <strong>Wrong Way Detection:</strong> Uses Turf.bearing to compare vehicle direction vs. lane direction (&gt;160° = violation).
                   </div>
