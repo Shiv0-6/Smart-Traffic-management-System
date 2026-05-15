@@ -22,14 +22,14 @@ export const StatCard: React.FC<StatCardProps> = ({
 }) => {
   return (
     <Card className="surface-card h-full overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        <div className="rounded-md border bg-background/70 p-2">
+        <div className="rounded-md border bg-primary/10 p-2">
           <Icon className="h-4 w-4 text-primary" />
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-semibold tracking-tight">{value}</div>
+        <div className="text-3xl font-semibold tracking-tight text-foreground">{value}</div>
         {description && (
           <p className="text-xs text-muted-foreground mt-1">{description}</p>
         )}

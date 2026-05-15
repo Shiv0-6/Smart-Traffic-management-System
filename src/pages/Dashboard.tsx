@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Car, Activity, AlertTriangle, Gauge, TrendingUp, Clock, Zap, Map as MapIcon, Wifi, RefreshCw, ArrowRight, ShieldCheck } from 'lucide-react';
 import { StatCard } from '@/components/common/StatCard';
 import { GoogleTrafficMap } from '@/components/common/GoogleTrafficMap';
-import LeafletTrafficMap from '@/components/maps/LeafletTrafficMap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -147,6 +146,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const highCongestionCount = flowData.filter((flow) => flow.congestion_level === 'high').length;
+  const latestFlow = flowData[0];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
@@ -159,19 +161,19 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="page-shell space-y-6">
+    <div className="page-shell space-y-5">
       <div className="page-header">
         <div>
           <h1 className="page-title">Traffic Management Dashboard</h1>
-          <p className="text-muted-foreground mt-2 flex items-center gap-2">
+          <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4" />
-            Real-time overview of traffic system status
+            Live city traffic overview, signal health, and violation alerts
           </p>
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2 rounded-md border border-success/30 bg-success/10 px-3 py-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+          <div className="flex items-center gap-2 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-success">
             <ShieldCheck className="h-4 w-4 text-success" />
-            <span className="text-sm font-medium">System Online</span>
+            <span className="text-sm font-medium">Online</span>
           </div>
           <div className={`flex items-center gap-2 rounded-md border px-3 py-2 ${
             isConnected 
@@ -180,10 +182,10 @@ const Dashboard: React.FC = () => {
           }`}>
             <Wifi className={`h-4 w-4 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />
             <span className="text-sm font-medium">
-              Socket.io {isConnected ? 'Connected' : 'Disconnected'}
+              Realtime {isConnected ? 'Connected' : 'Offline'}
             </span>
           </div>
-          <Button variant="outline" onClick={loadData} className="sm:ml-2">
+          <Button variant="outline" onClick={loadData}>
             <RefreshCw className="h-4 w-4" />
             Refresh
           </Button>
@@ -227,89 +229,53 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
-        <Card className="surface-card">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <Card className="surface-card overflow-hidden">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <MapIcon className="h-5 w-5 text-primary" />
-                  Google Traffic Map
+                  Live Traffic Map
                 </CardTitle>
-                <CardDescription>Interactive real-time traffic visualization with Google Maps</CardDescription>
+                <CardDescription>Realtime traffic layer with signal markers</CardDescription>
               </div>
-              <Badge variant="outline" className="border-primary text-primary">
-                LIVE
-              </Badge>
+              <div className="flex items-center gap-2">
+                {latestFlow && (
+                  <Badge variant="secondary" className="capitalize">
+                    {latestFlow.congestion_level || 'normal'} flow
+                  </Badge>
+                )}
+                <Badge variant="outline" className="border-primary text-primary">
+                  Live
+                </Badge>
+              </div>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="overflow-hidden rounded-lg border border-border" style={{ height: '500px' }}>
+          <CardContent className="pb-6">
+            <div className="space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border bg-muted/20" style={{ height: '560px' }}>
                 <GoogleTrafficMap signals={signals} />
               </div>
-              <div className="text-xs text-muted-foreground text-center">
-                Google Maps with traffic layer and signal markers
+              <div className="grid gap-3 text-sm sm:grid-cols-3">
+                <div className="rounded-lg border bg-background/50 p-3">
+                  <p className="text-xs text-muted-foreground">Latest Location</p>
+                  <p className="mt-1 truncate font-medium">{latestFlow?.location || 'Waiting for data'}</p>
+                </div>
+                <div className="rounded-lg border bg-background/50 p-3">
+                  <p className="text-xs text-muted-foreground">Current Volume</p>
+                  <p className="mt-1 font-medium">{latestFlow?.vehicle_count ?? 0} vehicles</p>
+                </div>
+                <div className="rounded-lg border bg-background/50 p-3">
+                  <p className="text-xs text-muted-foreground">Congested Areas</p>
+                  <p className="mt-1 font-medium">{highCongestionCount}</p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="surface-card">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <MapIcon className="h-5 w-5 text-accent" />
-                  Google Map (Standard)
-                </CardTitle>
-                <CardDescription>Standard Google Map without the traffic overlay</CardDescription>
-              </div>
-              <Badge variant="outline" className="border-accent text-accent shadow-sm">
-                Standard
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="overflow-hidden rounded-lg border border-border" style={{ height: '500px' }}>
-                <GoogleTrafficMap signals={signals} trafficLayer={false} mapStyles={null} />
-              </div>
-              <div className="text-xs text-muted-foreground text-center">
-                Clean Google Map view without traffic layer
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-3 grid-cols-1">
-        <Card className="surface-card xl:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <MapIcon className="h-5 w-5 text-primary" />
-                OpenStreetMap Traffic View
-              </CardTitle>
-              <Badge variant="outline" className="border-primary text-primary shadow-sm">
-                Leaflet.js
-              </Badge>
-            </div>
-            <CardDescription>
-              Free, open-source mapping with CartoDB Dark Matter tiles
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-hidden rounded-lg border border-border">
-              <LeafletTrafficMap signals={signals} />
-            </div>
-            <div className="text-xs text-muted-foreground text-center mt-3">
-              Powered by OpenStreetMap and Leaflet.js
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6 col-span-1">
+        <div className="space-y-5">
           <Card className="surface-card">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -321,7 +287,7 @@ const Dashboard: React.FC = () => {
             <CardContent className="space-y-2">
               <Button 
                 variant="outline" 
-                className="w-full justify-between"
+                className="h-11 w-full justify-between"
                 onClick={() => navigate('/detection')}
               >
                 <Car className="h-4 w-4 mr-2" />
@@ -330,7 +296,7 @@ const Dashboard: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-between"
+                className="h-11 w-full justify-between"
                 onClick={() => navigate('/signals')}
               >
                 <Activity className="h-4 w-4 mr-2" />
@@ -339,7 +305,7 @@ const Dashboard: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-between"
+                className="h-11 w-full justify-between"
                 onClick={() => navigate('/violations')}
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
@@ -348,7 +314,7 @@ const Dashboard: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-between"
+                className="h-11 w-full justify-between"
                 onClick={() => navigate('/analysis')}
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
@@ -395,10 +361,33 @@ const Dashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
+
+          <Card className="surface-card">
+            <CardHeader>
+              <CardTitle className="text-lg">Live Flow Feed</CardTitle>
+              <CardDescription>Latest traffic readings</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {flowData.slice(0, 4).map((flow) => (
+                <div key={flow.id} className="interactive-row p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="truncate text-sm font-medium">{flow.location}</p>
+                    <Badge variant="secondary" className="capitalize">
+                      {flow.congestion_level || 'normal'}
+                    </Badge>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{flow.vehicle_count ?? 0} vehicles</span>
+                    <span>{flow.avg_speed ?? 0} km/h</span>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2 grid-cols-1">
+      <div className="grid gap-5 xl:grid-cols-2 grid-cols-1">
         <Card className="surface-card">
           <CardHeader>
             <CardTitle>Traffic Signals Status</CardTitle>
@@ -407,7 +396,7 @@ const Dashboard: React.FC = () => {
           <CardContent>
             <div className="space-y-3">
               {signals.slice(0, 4).map((signal) => (
-                <div key={signal.id} className="interactive-row flex items-center justify-between p-4">
+                <div key={signal.id} className="interactive-row flex items-center justify-between gap-4 p-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-4 h-4 rounded-full ${getStatusColor(signal.status)} animate-pulse`} />
                     <div>
